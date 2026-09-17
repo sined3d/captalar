@@ -54,6 +54,7 @@ draft={
     status:"Enviado",
     created:draft.created || new Date().toISOString()
 };
+}; 
 
 $("#cameraBtn").onclick=()=>$("#photoInput").click();
 $("#photoInput").onchange=e=>{
@@ -168,4 +169,3 @@ editingId=id;
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;$("#installBtn").classList.remove("hidden")});
 $("#installBtn").onclick=async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();deferredPrompt=null;$("#installBtn").classList.add("hidden")};
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
- }
