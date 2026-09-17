@@ -1,0 +1,10 @@
+{
+  "name":"CaptaLar",
+  "short_name":"CaptaLar",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#f5f7fb",
+  "theme_color":"#0b3b70",
+  "lang":"pt-BR",
+  "description":"Sistema de captação e gestão de imóveis."
+}
