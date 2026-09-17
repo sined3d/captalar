@@ -2,6 +2,7 @@ const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
 let properties=JSON.parse(localStorage.getItem("captalar_properties")||"[]");
 let draft={photos:[],signature:null};
 let deferredPrompt=null;
+let editingId=null;
 
 function go(id){$$(".screen").forEach(x=>x.classList.remove("active"));$("#"+id).classList.add("active");window.scrollTo(0,0);refresh()}
 $$("[data-go]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.go)));
@@ -31,8 +32,27 @@ $("#geoBtn").onclick=()=>{
 
 $("#propertyForm").onsubmit=e=>{
  e.preventDefault();
- draft={...draft,id:idFor(),address:$("#address").value,number:$("#number").value,neighborhood:$("#neighborhood").value,city:$("#city").value,cep:$("#cep").value,type:$("#type").value,price:$("#price").value,rooms:$("#rooms").value,baths:$("#baths").value,parking:$("#parking").value,area:$("#area").value,description:$("#description").value,owner:$("#owner").value,phone:$("#phone").value,whatsapp:$("#whatsapp").value,email:$("#email").value,status:"Enviado",created:new Date().toISOString(),photos:[]};
- $("#photoGrid").innerHTML=""; $("#photoInput").value=""; go("photos");
+draft={
+    ...draft,
+    id:editingId || idFor(),
+    address:$("#address").value,
+    number:$("#number").value,
+    neighborhood:$("#neighborhood").value,
+    city:$("#city").value,
+    cep:$("#cep").value,
+    type:$("#type").value,
+    price:$("#price").value,
+    rooms:$("#rooms").value,
+    baths:$("#baths").value,
+    parking:$("#parking").value,
+    area:$("#area").value,
+    description:$("#description").value,
+    owner:$("#owner").value,
+    phone:$("#phone").value,
+    whatsapp:$("#whatsapp").value,
+    email:$("#email").value,
+    status:"Enviado",
+    created:draft.created || new Date().toISOString()
 };
 
 $("#cameraBtn").onclick=()=>$("#photoInput").click();
@@ -66,20 +86,85 @@ $("#reviewBtn").onclick=()=>{
  go("review");
 };
 $("#saveProperty").onclick=()=>{
- properties.unshift(draft);localStorage.setItem("captalar_properties",JSON.stringify(properties));toast("Imóvel salvo com sucesso!");setTimeout(()=>go("home"),500);
+    if(editingId){
+        const index=properties.findIndex(x=>x.id===editingId);
+
+        if(index!==-1){
+            properties[index]=draft;
+        }
+
+        editingId=null;
+        toast("Imóvel atualizado com sucesso!");
+    }else{
+        properties.unshift(draft);
+        toast("Imóvel salvo com sucesso!");
+    }
+
+    localStorage.setItem("captalar_properties",JSON.stringify(properties));
+
+    setTimeout(()=>go("home"),500);
 };
 
-function card(p){let img=p.photos?.[0];return `<div class="property-card">${img?`<img class="thumb" src="${img}">`:`<div class="thumb"></div>`}<div style="flex:1"><h3>${p.type} · ${p.id}</h3><p>${p.address}, ${p.number} · ${p.neighborhood}</p><p>${money(p.price)} · ${p.rooms||0} quartos · ${p.area||0} m²</p><span class="tag">${p.status}</span></div></div>`}
-function refresh(){
- $("#totalCount").textContent=properties.length;$("#pendingCount").textContent=properties.filter(p=>p.status==="Em análise").length;
- $("#negotiationCount").textContent=properties.filter(p=>p.status==="Negociação").length;$("#closedCount").textContent=properties.filter(p=>["Vendido","Alugado","Concluído"].includes(p.status)).length;
- $("#recentList").innerHTML=properties.length?properties.slice(0,5).map(card).join(""):"Nenhum imóvel cadastrado ainda.";
- $("#allList").innerHTML=properties.length?properties.map(card).join(""):"Nenhum imóvel cadastrado.";
- $("#mTotal").textContent=properties.length;$("#mPending").textContent=properties.filter(p=>p.status==="Em análise").length;
- $("#mSent").textContent=properties.filter(p=>["Enviado","Em análise","Negociação"].includes(p.status)).length;$("#mClosed").textContent=properties.filter(p=>["Vendido","Alugado","Concluído"].includes(p.status)).length;
+function card(p){
+    let img=p.photos?.[0];
+
+    return `
+    <div class="property-card">
+        ${img ? `<img class="thumb" src="${img}">` : `<div class="thumb"></div>`}
+
+        <div style="flex:1">
+            <h3>${p.type} · ${p.id}</h3>
+            <p>${p.address}, ${p.number} · ${p.neighborhood}</p>
+            <p>${money(p.price)} · ${p.rooms || 0} quartos · ${p.area || 0} m²</p>
+            <span class="tag">${p.status}</span>
+
+            <div style="display:flex;gap:8px;margin-top:10px">
+                <button class="secondary" onclick="editProperty('${p.id}')">✏️ Editar</button>
+                <button class="secondary" onclick="deleteProperty('${p.id}')">🗑️ Excluir</button>
+            </div>
+        </div>
+    </div>`;
 }
 refresh();
+function deleteProperty(id){
+    const p = properties.find(x => x.id === id);
+    if(!p) return;
 
+    if(!confirm(`Excluir o imóvel ${p.id}?`)) return;
+
+    properties = properties.filter(x => x.id !== id);
+    localStorage.setItem("captalar_properties", JSON.stringify(properties));
+
+    toast("Imóvel excluído.");
+    refresh();
+}
+
+function editProperty(id){
+    const p = properties.find(x => x.id === id);
+    if(!p) return;
+editingId=id;
+    $("#address").value = p.address || "";
+    $("#number").value = p.number || "";
+    $("#neighborhood").value = p.neighborhood || "";
+    $("#city").value = p.city || "";
+    $("#cep").value = p.cep || "";
+    $("#type").value = p.type || "";
+    $("#price").value = p.price || "";
+    $("#rooms").value = p.rooms || "";
+    $("#baths").value = p.baths || "";
+    $("#parking").value = p.parking || "";
+    $("#area").value = p.area || "";
+    $("#description").value = p.description || "";
+    $("#owner").value = p.owner || "";
+    $("#phone").value = p.phone || "";
+    $("#whatsapp").value = p.whatsapp || "";
+    $("#email").value = p.email || "";
+
+    draft = {...p};
+
+    toast("Imóvel carregado para edição.");
+    go("new");
+}
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;$("#installBtn").classList.remove("hidden")});
 $("#installBtn").onclick=async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();deferredPrompt=null;$("#installBtn").classList.add("hidden")};
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
