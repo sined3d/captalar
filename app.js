@@ -80,7 +80,7 @@ function renderPhotos(){$("#photoGrid").innerHTML=draft.photos.map(p=>`<img src=
 $("#toSignature").onclick=()=>{if(!draft.photos.length){toast("Adicione pelo menos uma foto.");return}go("signature")};
 
 // assinatura com mouse/toque
-const canvas=$("#signature");
+const canvas=document.getElementById("signature");
 const ctx=canvas.getContext("2d");
 let drawing=false;
 
