@@ -80,18 +80,65 @@ function renderPhotos(){$("#photoGrid").innerHTML=draft.photos.map(p=>`<img src=
 $("#toSignature").onclick=()=>{if(!draft.photos.length){toast("Adicione pelo menos uma foto.");return}go("signature")};
 
 // assinatura com mouse/toque
-const canvas=$("#signature"),ctx=canvas.getContext("2d");let drawing=false,last=null;
-function pos(e){const r=canvas.getBoundingClientRect(),t=e.touches?.[0]||e;return{x:(t.clientX-r.left)*canvas.width/r.width,y:(t.clientY-r.top)*canvas.height/r.height}}
-function start(e){drawing=true;last=pos(e);e.preventDefault()}function move(e){if(!drawing)return;let p=pos(e);ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(p.x,p.y);ctx.lineWidth=3;ctx.lineCap="round";ctx.strokeStyle="#18202b";ctx.stroke();last=p;e.preventDefault()}function end(){drawing=false}
-canvas.addEventListener("mousedown",start);
-canvas.addEventListener("mousemove",move);
-canvas.addEventListener("mouseup",end);
-canvas.addEventListener("mouseleave",end);
+const canvas=$("#signature");
+const ctx=canvas.getContext("2d");
+let drawing=false;
 
-canvas.addEventListener("touchstart",start,{passive:false});
-canvas.addEventListener("touchmove",move,{passive:false});
-canvas.addEventListener("touchend",end);
-$("#clearSignature").onclick=()=>ctx.clearRect(0,0,canvas.width,canvas.height);
+function getPos(e){
+    const r=canvas.getBoundingClientRect();
+    const point=e.touches ? e.touches[0] : e;
+
+    return {
+        x:(point.clientX-r.left)*(canvas.width/r.width),
+        y:(point.clientY-r.top)*(canvas.height/r.height)
+    };
+}
+
+function startDrawing(e){
+    e.preventDefault();
+    drawing=true;
+
+    const p=getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(p.x,p.y);
+}
+
+function draw(e){
+    if(!drawing)return;
+    e.preventDefault();
+
+    const p=getPos(e);
+
+    ctx.lineWidth=4;
+    ctx.lineCap="round";
+    ctx.lineJoin="round";
+    ctx.strokeStyle="#18202b";
+
+    ctx.lineTo(p.x,p.y);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(p.x,p.y);
+}
+
+function stopDrawing(e){
+    if(e)e.preventDefault();
+    drawing=false;
+    ctx.beginPath();
+}
+
+canvas.addEventListener("mousedown",startDrawing);
+canvas.addEventListener("mousemove",draw);
+canvas.addEventListener("mouseup",stopDrawing);
+canvas.addEventListener("mouseleave",stopDrawing);
+
+canvas.addEventListener("touchstart",startDrawing,{passive:false});
+canvas.addEventListener("touchmove",draw,{passive:false});
+canvas.addEventListener("touchend",stopDrawing,{passive:false});
+
+$("#clearSignature").onclick=()=>{
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+};
 $("#reviewBtn").onclick=()=>{
  draft.signature=canvas.toDataURL("image/png");
  $("#reviewCard").innerHTML=`<dl><dt>ID</dt><dd><b>${draft.id}</b></dd><dt>Endereço</dt><dd>${draft.address}, ${draft.number} — ${draft.neighborhood} — ${draft.city}</dd><dt>Tipo</dt><dd>${draft.type}</dd><dt>Valor</dt><dd>${money(draft.price)}</dd><dt>Características</dt><dd>${draft.rooms||0} quartos · ${draft.baths||0} banheiros · ${draft.parking||0} vagas · ${draft.area||0} m²</dd><dt>Proprietário</dt><dd>${draft.owner}</dd><dt>Fotos</dt><dd>${draft.photos.length}</dd><dt>Autorização</dt><dd>✓ Assinatura registrada</dd></dl>`;
