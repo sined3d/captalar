@@ -83,7 +83,14 @@ $("#toSignature").onclick=()=>{if(!draft.photos.length){toast("Adicione pelo men
 const canvas=$("#signature"),ctx=canvas.getContext("2d");let drawing=false,last=null;
 function pos(e){const r=canvas.getBoundingClientRect(),t=e.touches?.[0]||e;return{x:(t.clientX-r.left)*canvas.width/r.width,y:(t.clientY-r.top)*canvas.height/r.height}}
 function start(e){drawing=true;last=pos(e);e.preventDefault()}function move(e){if(!drawing)return;let p=pos(e);ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(p.x,p.y);ctx.lineWidth=3;ctx.lineCap="round";ctx.strokeStyle="#18202b";ctx.stroke();last=p;e.preventDefault()}function end(){drawing=false}
-["mousedown","touchstart"].forEach(x=>canvas.addEventListener(x,start,{passive:false}));["mousemove","touchmove"].forEach(x=>canvas.addEventListener(x,move,{passive:false}));["mouseup","mouseleave","touchend"].forEach(x=>canvas.addEventListener(x,end));
+canvas.addEventListener("mousedown",start);
+canvas.addEventListener("mousemove",move);
+canvas.addEventListener("mouseup",end);
+canvas.addEventListener("mouseleave",end);
+
+canvas.addEventListener("touchstart",start,{passive:false});
+canvas.addEventListener("touchmove",move,{passive:false});
+canvas.addEventListener("touchend",end);
 $("#clearSignature").onclick=()=>ctx.clearRect(0,0,canvas.width,canvas.height);
 $("#reviewBtn").onclick=()=>{
  draft.signature=canvas.toDataURL("image/png");
