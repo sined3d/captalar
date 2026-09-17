@@ -52,9 +52,13 @@ draft={
     whatsapp:$("#whatsapp").value,
     email:$("#email").value,
     status:"Enviado",
-    created:draft.created || new Date().toISOString()
+       created:draft.created || new Date().toISOString()
+ };
+
+ $("#photoInput").value="";
+ renderPhotos();
+ go("photos");
 };
-}; 
 
 $("#cameraBtn").onclick=()=>$("#photoInput").click();
 $("#photoInput").onchange=e=>{
