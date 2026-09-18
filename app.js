@@ -179,14 +179,51 @@ $("#reviewBtn").onclick=()=>{
  $("#reviewCard").innerHTML=`<dl><dt>ID</dt><dd><b>${draft.id}</b></dd><dt>Endereço</dt><dd>${draft.address}, ${draft.number} — ${draft.neighborhood} — ${draft.city}</dd><dt>Tipo</dt><dd>${draft.type}</dd><dt>Valor</dt><dd>${money(draft.price)}</dd><dt>Características</dt><dd>${draft.rooms||0} quartos · ${draft.baths||0} banheiros · ${draft.parking||0} vagas · ${draft.area||0} m²</dd><dt>Proprietário</dt><dd>${draft.owner}</dd><dt>Fotos</dt><dd>${draft.photos.length}</dd><dt>Autorização</dt><dd>✓ Assinatura registrada</dd></dl>`;
  go("review");
 };
-$("#saveProperty").onclick=()=>{
-    if(editingId){
-        const index=properties.findIndex(x=>x.id===editingId);
+$("#saveProperty").onclick=async()=>{
+    try{
+        const r=await fetch(`${SUPABASE_URL}/properties`,{
+            method:"POST",
+            headers:{
+                "apikey":SUPABASE_KEY,
+                "Authorization":`Bearer ${SUPABASE_KEY}`,
+                "Content-Type":"application/json",
+                "Prefer":"resolution=merge-duplicates"
+            },
+            body:JSON.stringify({
+                id:draft.id,
+                data:draft
+            })
+        });
 
-        if(index!==-1){
-            properties[index]=draft;
+        if(!r.ok){
+            console.error("Erro ao salvar no Supabase:",r.status,await r.text());
+            toast("Erro ao salvar online.");
+            return;
         }
 
+        if(editingId){
+            const index=properties.findIndex(x=>x.id===editingId);
+
+            if(index!==-1){
+                properties[index]=draft;
+            }
+
+            editingId=null;
+            toast("Imóvel atualizado com sucesso!");
+        }else{
+            properties.unshift(draft);
+            toast("Imóvel salvo com sucesso!");
+        }
+
+        localStorage.setItem("captalar_properties",JSON.stringify(properties));
+
+        setTimeout(()=>go("home"),500);
+
+    }catch(err){
+        console.error("Erro de conexão:",err);
+        toast("Não foi possível salvar online.");
+    }
+};
         editingId=null;
         toast("Imóvel atualizado com sucesso!");
     }else{
