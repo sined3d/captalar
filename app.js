@@ -180,7 +180,24 @@ function card(p){
         </div>
     </div>`;
 }
+
+function refresh(){
+    const allList = $("#allList");
+
+    if(!allList) return;
+
+    if(!properties.length){
+        allList.className = "cards empty";
+        allList.innerHTML = "Nenhum imóvel cadastrado.";
+        return;
+    }
+
+    allList.className = "cards";
+    allList.innerHTML = properties.map(card).join("");
+}
+
 refresh();
+
 function deleteProperty(id){
     const p = properties.find(x => x.id === id);
     if(!p) return;
