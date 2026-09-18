@@ -239,6 +239,7 @@ function refresh(){
 }
 
 refresh();
+loadFromSupabase();
 
 function deleteProperty(id){
     const p = properties.find(x => x.id === id);
