@@ -1,4 +1,8 @@
 const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+
+const SUPABASE_URL="https://emvmzkenynkqqmzrqxqi.supabase.co/rest/v1";
+const SUPABASE_KEY="sb_publishable_2VCIY9lN322gBZuh3fu9Eg_hNUmvTA7";
+
 let properties=JSON.parse(localStorage.getItem("captalar_properties")||"[]");
 let draft={photos:[],signature:null};
 let deferredPrompt=null;
