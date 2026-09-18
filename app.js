@@ -290,20 +290,7 @@ editingId=id;
     toast("Imóvel carregado para edição.");
     go("new");
 }
-function refresh(){
-    const allList = $("#allList");
 
-    if(!allList) return;
-
-    if(!properties.length){
-        allList.className = "cards empty";
-        allList.innerHTML = "Nenhum imóvel cadastrado.";
-        return;
-    }
-
-    allList.className = "cards";
-    allList.innerHTML = properties.map(card).join("");
-}
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;$("#installBtn").classList.remove("hidden")});
 $("#installBtn").onclick=async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();deferredPrompt=null;$("#installBtn").classList.add("hidden")};
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
