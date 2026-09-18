@@ -82,62 +82,58 @@ $("#toSignature").onclick=()=>{if(!draft.photos.length){toast("Adicione pelo men
 // assinatura com mouse/toque
 const canvas = document.querySelector("#signatureCanvas");
 const ctx = canvas.getContext("2d");
-let drawing=false;
 
-function getPos(e){
-    const r=canvas.getBoundingClientRect();
-    const point=e.touches ? e.touches[0] : e;
+let drawing = false;
+
+function getPosition(e) {
+    const rect = canvas.getBoundingClientRect();
 
     return {
-        x:(point.clientX-r.left)*(canvas.width/r.width),
-        y:(point.clientY-r.top)*(canvas.height/r.height)
+        x: (e.clientX - rect.left) * (canvas.width / rect.width),
+        y: (e.clientY - rect.top) * (canvas.height / rect.height)
     };
 }
 
-function startDrawing(e){
-    e.preventDefault();
-    drawing=true;
+canvas.addEventListener("pointerdown", function(e) {
+    drawing = true;
 
-    const p=getPos(e);
+    const p = getPosition(e);
+
     ctx.beginPath();
-    ctx.moveTo(p.x,p.y);
-}
+    ctx.moveTo(p.x, p.y);
 
-function draw(e){
-    if(!drawing)return;
-    e.preventDefault();
+    canvas.setPointerCapture(e.pointerId);
+});
 
-    const p=getPos(e);
+canvas.addEventListener("pointermove", function(e) {
+    if (!drawing) return;
 
-    ctx.lineWidth=4;
-    ctx.lineCap="round";
-    ctx.lineJoin="round";
-    ctx.strokeStyle="#18202b";
+    const p = getPosition(e);
 
-    ctx.lineTo(p.x,p.y);
+    ctx.lineWidth = 4;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.strokeStyle = "#18202b";
+
+    ctx.lineTo(p.x, p.y);
     ctx.stroke();
 
     ctx.beginPath();
-    ctx.moveTo(p.x,p.y);
-}
+    ctx.moveTo(p.x, p.y);
+});
 
-function stopDrawing(e){
-    if(e)e.preventDefault();
-    drawing=false;
+canvas.addEventListener("pointerup", function(e) {
+    drawing = false;
     ctx.beginPath();
-}
+});
 
-canvas.addEventListener("mousedown",startDrawing);
-canvas.addEventListener("mousemove",draw);
-canvas.addEventListener("mouseup",stopDrawing);
-canvas.addEventListener("mouseleave",stopDrawing);
+canvas.addEventListener("pointercancel", function(e) {
+    drawing = false;
+    ctx.beginPath();
+});
 
-canvas.addEventListener("touchstart",startDrawing,{passive:false});
-canvas.addEventListener("touchmove",draw,{passive:false});
-canvas.addEventListener("touchend",stopDrawing,{passive:false});
-
-$("#clearSignature").onclick=()=>{
-    ctx.clearRect(0,0,canvas.width,canvas.height);
+$("#clearSignature").onclick = function() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 };
 $("#reviewBtn").onclick=()=>{
  draft.signature=canvas.toDataURL("image/png");
