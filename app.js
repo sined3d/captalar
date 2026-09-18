@@ -184,6 +184,8 @@ function card(p){
 function refresh(){
     const allList = $("#allList");
 
+    $("#totalCount").textContent = properties.length;
+
     if(!allList) return;
 
     if(!properties.length){
