@@ -221,6 +221,16 @@ function card(p){
 }
 
 function refresh(){
+     $("#totalCount").textContent = properties.length;
+
+    $("#pendingCount").textContent = properties.filter(p => p.status === "Pendente").length;
+    $("#negotiationCount").textContent = properties.filter(p => p.status === "Em negociação").length;
+    $("#closedCount").textContent = properties.filter(p => p.status === "Fechado").length;
+
+    $("#mTotal").textContent = properties.length;
+    $("#mPending").textContent = properties.filter(p => p.status === "Pendente").length;
+    $("#mSent").textContent = properties.filter(p => p.status === "Enviado").length;
+    $("#mClosed").textContent = properties.filter(p => p.status === "Fechado").length;
     const allList = $("#allList");
 
    
@@ -235,15 +245,7 @@ function refresh(){
 
     allList.className = "cards";
     allList.innerHTML = properties.map(card).join("");
- $("#totalCount").textContent = properties.length;
-    $("#pendingCount").textContent = properties.filter(p => p.status === "Pendente").length;
-$("#negotiationCount").textContent = properties.filter(p => p.status === "Em negociação").length;
-$("#closedCount").textContent = properties.filter(p => p.status === "Fechado").length;
-
-$("#mTotal").textContent = properties.length;
-$("#mPending").textContent = properties.filter(p => p.status === "Pendente").length;
-$("#mSent").textContent = properties.filter(p => p.status === "Enviado").length;
-$("#mClosed").textContent = properties.filter(p => p.status === "Fechado").length;
+ 
 }
 
 refresh();
