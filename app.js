@@ -4,7 +4,17 @@ let draft={photos:[],signature:null};
 let deferredPrompt=null;
 let editingId=null;
 
-function go(id){$$(".screen").forEach(x=>x.classList.remove("active"));$("#"+id).classList.add("active");window.scrollTo(0,0);refresh()}
+function go(id){
+    $$(".screen").forEach(x=>x.classList.remove("active"));
+    $("#"+id).classList.add("active");
+    window.scrollTo(0,0);
+
+    refresh();
+
+    if(id === "home"){
+        $("#totalCount").textContent = properties.length;
+    }
+}
 $$("[data-go]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.go)));
 function toast(t){let x=$("#toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),2500)}
 function money(v){return v?new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(Number(String(v).replace(",","."))):"Não informado"}
