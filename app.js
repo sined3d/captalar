@@ -4,6 +4,31 @@ const SUPABASE_URL="https://emvmzkenynkqqmzrqxqi.supabase.co/rest/v1";
 const SUPABASE_KEY="sb_publishable_2VCIY9lN322gBZuh3fu9Eg_hNUmvTA7";
 
 let properties=JSON.parse(localStorage.getItem("captalar_properties")||"[]");
+async function loadFromSupabase(){
+    try{
+        const r=await fetch(`${SUPABASE_URL}/properties?select=id,data`,{
+            headers:{
+                "apikey":SUPABASE_KEY,
+                "Authorization":`Bearer ${SUPABASE_KEY}`
+            }
+        });
+
+        if(!r.ok){
+            console.error("Erro ao carregar Supabase:",r.status);
+            return;
+        }
+
+        const rows=await r.json();
+
+        if(rows.length){
+            properties=rows.map(x=>x.data);
+            localStorage.setItem("captalar_properties",JSON.stringify(properties));
+            refresh();
+        }
+    }catch(err){
+        console.error("Erro de conexão com Supabase:",err);
+    }
+}
 let draft={photos:[],signature:null};
 let deferredPrompt=null;
 let editingId=null;
