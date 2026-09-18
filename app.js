@@ -184,7 +184,7 @@ function card(p){
 function refresh(){
     const allList = $("#allList");
 
-    $("#totalCount").textContent = properties.length;
+   
 
     if(!allList) return;
 
@@ -196,6 +196,7 @@ function refresh(){
 
     allList.className = "cards";
     allList.innerHTML = properties.map(card).join("");
+ $("#totalCount").textContent = properties.length;
 }
 
 refresh();
