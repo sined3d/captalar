@@ -224,13 +224,7 @@ $("#saveProperty").onclick=async()=>{
         toast("Não foi possível salvar online.");
     }
 };
-        editingId=null;
-        toast("Imóvel atualizado com sucesso!");
-    }else{
-        properties.unshift(draft);
-        toast("Imóvel salvo com sucesso!");
-    }
-
+    
     localStorage.setItem("captalar_properties",JSON.stringify(properties));
 
     setTimeout(()=>go("home"),500);
