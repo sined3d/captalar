@@ -225,11 +225,6 @@ $("#saveProperty").onclick=async()=>{
     }
 };
     
-    localStorage.setItem("captalar_properties",JSON.stringify(properties));
-
-    setTimeout(()=>go("home"),500);
-};
-
 function card(p){
     let img=p.photos?.[0];
 
