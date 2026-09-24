@@ -20,12 +20,21 @@ async function supabaseRequest(path, options = {}) {
     },
   });
 
+  const text = await response.text();
+
   if (!response.ok) {
-    const error = await response.text();
-    throw new Error(error || "Erro no Supabase");
+    throw new Error(text || `Erro HTTP ${response.status}`);
   }
 
-  return response.status === 204 ? null : response.json();
+  if (!text.trim()) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    return text;
+  }
 }
 
 async function carregarDoSupabase() {
