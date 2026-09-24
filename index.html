@@ -1,133 +1,240 @@
 <!doctype html>
 <html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b3b70">
-<meta name="description" content="CaptaLar - captura e gestão de imóveis">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.svg">
-<title>CaptaLar</title>
-<link rel="stylesheet" href="styles.css">
-</head>
-<body>
-<header class="topbar">
-  <div class="brand"><span class="logo">⌂</span><span>Capta<span>Lar</span></span></div>
-  <button id="installBtn" class="ghost hidden">Instalar</button>
-</header>
-
-<main>
-<section id="home" class="screen active">
-  <div class="hero">
-    <p class="eyebrow">CAPTAÇÃO DE IMÓVEIS</p>
-    <h1>Olá, <span id="userName">Captador</span>! 👋</h1>
-    <p>Cadastre imóveis pelo celular de forma rápida e organizada.</p>
-    <button class="primary big" data-go="new">+ Novo imóvel</button>
-  </div>
-  <div class="stats">
-    <div><b id="totalCount">0</b><small>Total</small></div>
-    <div><b id="pendingCount">0</b><small>Em análise</small></div>
-    <div><b id="negotiationCount">0</b><small>Negociação</small></div>
-    <div><b id="closedCount">0</b><small>Concluídos</small></div>
-  </div>
-  <h2>Últimos imóveis</h2>
-  <div id="recentList" class="cards empty">Nenhum imóvel cadastrado ainda.</div>
-</section>
-
-<section id="new" class="screen">
-  <div class="section-head"><button class="back" data-go="home">←</button><div><p class="eyebrow">NOVO CADASTRO</p><h1>Novo imóvel</h1></div></div>
-  <div class="steps"><span class="on">1 Local</span><span>2 Imóvel</span><span>3 Fotos</span><span>4 Proprietário</span><span>5 Assinatura</span></div>
-  <form id="propertyForm">
-    <div class="panel">
-      <h3>📍 Localização</h3>
-      <button type="button" id="geoBtn" class="secondary full">Usar minha localização</button>
-      <div class="grid2">
-        <label>Endereço<input id="address" required placeholder="Rua, avenida..."></label>
-        <label>Número<input id="number" placeholder="123"></label>
-        <label>Bairro<input id="neighborhood"></label>
-        <label>Cidade<input id="city" value="São Carlos - SP"></label>
-        <label>CEP<input id="cep" inputmode="numeric"></label>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#0b3b70" />
+    <meta name="description" content="CaptaLar - captura e gestão de imóveis" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" />
+    <title>CaptaLar</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">⌂</span><span>Capta<span>Lar</span></span>
       </div>
-      <div id="geoStatus" class="hint"></div>
-    </div>
-    <div class="panel">
-      <h3>🏠 Dados do imóvel</h3>
-      <div class="grid2">
-        <label>Tipo<select id="type"><option>Casa</option><option>Apartamento</option><option>Terreno</option><option>Comercial</option><option>Rural</option><option>Outro</option></select></label>
-        <label>Valor (R$)<input id="price" inputmode="decimal" placeholder="450000"></label>
-        <label>Quartos<input id="rooms" type="number" min="0"></label>
-        <label>Banheiros<input id="baths" type="number" min="0"></label>
-        <label>Vagas<input id="parking" type="number" min="0"></label>
-        <label>Área (m²)<input id="area" inputmode="decimal"></label>
-      </div>
-      <label>Descrição<textarea id="description" rows="4" placeholder="Detalhes importantes do imóvel"></textarea></label>
-    </div>
-    <div class="panel">
-      <h3>👤 Proprietário</h3>
-      <div class="grid2">
-        <label>Nome completo<input id="owner" required></label>
-        <label>Telefone<input id="phone" inputmode="tel"></label>
-        <label>WhatsApp<input id="whatsapp" inputmode="tel"></label>
-        <label>E-mail<input id="email" type="email"></label>
-      </div>
-      <label class="check"><input id="authorized" type="checkbox" required> Proprietário autorizou o cadastro do imóvel.</label>
-    </div>
-    <button type="submit" class="primary full big">Continuar para fotos →</button>
-  </form>
-</section>
+      <button id="installBtn" class="ghost hidden">Instalar</button>
+    </header>
 
-<section id="photos" class="screen">
-  <div class="section-head"><button class="back" data-go="new">←</button><div><p class="eyebrow">ETAPA 3</p><h1>Fotos do imóvel</h1></div></div>
-  <div class="panel">
-    <p class="hint">As fotos serão identificadas com CAPTALAR e o ID do imóvel.</p>
-    <input id="photoInput" type="file" accept="image/*" capture="environment" multiple hidden>
-    <button id="cameraBtn" class="secondary full">📷 Tirar / adicionar fotos</button>
-    <div id="photoGrid" class="photo-grid"></div>
-    <button id="toSignature" class="primary full big">Continuar →</button>
-  </div>
-</section>
+    <main>
+      <section id="home" class="screen active">
+        <div class="hero">
+          <p class="eyebrow">CAPTAÇÃO DE IMÓVEIS</p>
+          <h1>Olá, <span id="userName">Captador</span>! 👋</h1>
+          <p>Cadastre imóveis pelo celular de forma rápida e organizada.</p>
+          <button class="primary big" data-go="new">+ Novo imóvel</button>
+        </div>
+        <div class="stats">
+          <div><b id="totalCount">0</b><small>Total</small></div>
+          <div><b id="pendingCount">0</b><small>Em análise</small></div>
+          <div><b id="negotiationCount">0</b><small>Negociação</small></div>
+          <div><b id="closedCount">0</b><small>Concluídos</small></div>
+        </div>
+        <h2>Últimos imóveis</h2>
+        <div id="recentList" class="cards empty">
+          Nenhum imóvel cadastrado ainda.
+        </div>
+      </section>
 
-<section id="signature" class="screen">
-  <div class="section-head"><button class="back" data-go="photos">←</button><div><p class="eyebrow">ETAPA 5</p><h1>Autorização</h1></div></div>
-  <div class="panel">
-    <p>Peça ao proprietário para assinar no quadro abaixo.</p>
-   <canvas id="signatureCanvas" width="900" height="350" style="touch-action:none;display:block;width:100%;height:350px;border:2px solid #18202b;cursor:crosshair;"></canvas>
-    <div class="row"><button id="clearSignature" class="secondary">Limpar</button><button id="reviewBtn" class="primary">Revisar cadastro →</button></div>
-  </div>
-</section>
+      <section id="new" class="screen">
+        <div class="section-head">
+          <button class="back" data-go="home">←</button>
+          <div>
+            <p class="eyebrow">NOVO CADASTRO</p>
+            <h1>Novo imóvel</h1>
+          </div>
+        </div>
+        <div class="steps">
+          <span class="on">1 Local</span><span>2 Imóvel</span
+          ><span>3 Fotos</span><span>4 Proprietário</span
+          ><span>5 Assinatura</span>
+        </div>
+        <form id="propertyForm">
+          <div class="panel">
+            <h3>📍 Localização</h3>
+            <button type="button" id="geoBtn" class="secondary full">
+              Usar minha localização
+            </button>
+            <div class="grid2">
+              <label
+                >Endereço<input
+                  id="address"
+                  required
+                  placeholder="Rua, avenida..."
+              /></label>
+              <label>Número<input id="number" placeholder="123" /></label>
+              <label>Bairro<input id="neighborhood" /></label>
+              <label>Cidade<input id="city" value="São Carlos - SP" /></label>
+              <label>CEP<input id="cep" inputmode="numeric" /></label>
+            </div>
+            <div id="geoStatus" class="hint"></div>
+          </div>
+          <div class="panel">
+            <h3>🏠 Dados do imóvel</h3>
+            <div class="grid2">
+              <label
+                >Tipo<select id="type">
+                  <option>Casa</option>
+                  <option>Apartamento</option>
+                  <option>Terreno</option>
+                  <option>Comercial</option>
+                  <option>Rural</option>
+                  <option>Outro</option>
+                </select></label
+              >
+              <label
+                >Valor (R$)<input
+                  id="price"
+                  inputmode="decimal"
+                  placeholder="450000"
+              /></label>
+              <label>Quartos<input id="rooms" type="number" min="0" /></label>
+              <label>Banheiros<input id="baths" type="number" min="0" /></label>
+              <label>Vagas<input id="parking" type="number" min="0" /></label>
+              <label>Área (m²)<input id="area" inputmode="decimal" /></label>
+            </div>
+            <label
+              >Descrição<textarea
+                id="description"
+                rows="4"
+                placeholder="Detalhes importantes do imóvel"
+              ></textarea>
+            </label>
+          </div>
+          <div class="panel">
+            <h3>👤 Proprietário</h3>
+            <div class="grid2">
+              <label>Nome completo<input id="owner" required /></label>
+              <label>Telefone<input id="phone" inputmode="tel" /></label>
+              <label>WhatsApp<input id="whatsapp" inputmode="tel" /></label>
+              <label>E-mail<input id="email" type="email" /></label>
+            </div>
+            <label class="check"
+              ><input id="authorized" type="checkbox" required /> Proprietário
+              autorizou o cadastro do imóvel.</label
+            >
+          </div>
+          <button type="submit" class="primary full big">
+            Continuar para fotos →
+          </button>
+        </form>
+      </section>
 
-<section id="review" class="screen">
-  <div class="section-head"><button class="back" data-go="signature">←</button><div><p class="eyebrow">CONFERÊNCIA</p><h1>Revisar imóvel</h1></div></div>
-  <div id="reviewCard" class="panel review-card"></div>
-  <button id="saveProperty" class="primary full big">✓ Salvar e enviar imóvel</button>
-</section>
+      <section id="photos" class="screen">
+        <div class="section-head">
+          <button class="back" data-go="new">←</button>
+          <div>
+            <p class="eyebrow">ETAPA 3</p>
+            <h1>Fotos do imóvel</h1>
+          </div>
+        </div>
+        <div class="panel">
+          <p class="hint">
+            As fotos serão identificadas com CAPTALAR e o ID do imóvel.
+          </p>
+          <input
+            id="photoInput"
+            type="file"
+            accept="image/*"
+            capture="environment"
+            multiple
+            hidden
+          />
+          <button id="cameraBtn" class="secondary full">
+            📷 Tirar / adicionar fotos
+          </button>
+          <div id="photoGrid" class="photo-grid"></div>
+          <button id="toSignature" class="primary full big">Continuar →</button>
+        </div>
+      </section>
 
-<section id="properties" class="screen">
-  <div class="section-head"><button class="back" data-go="home">←</button><div><p class="eyebrow">MEUS IMÓVEIS</p><h1>Imóveis</h1></div></div>
- <div id="allList" class="cards empty">Nenhum imóvel cadastrado.</div>
-<div id="editArea" class="hidden"></div>
-</section>
+      <section id="signatureScreen" class="screen">
+        <div class="section-head">
+          <button class="back" data-go="photos">←</button>
+          <div>
+            <p class="eyebrow">ETAPA 5</p>
+            <h1>Autorização</h1>
+          </div>
+        </div>
 
-<section id="admin" class="screen">
-  <div class="section-head"><button class="back" data-go="home">←</button><div><p class="eyebrow">GESTÃO</p><h1>Painel</h1></div></div>
-  <div class="admin-grid">
-    <div class="metric"><b id="mTotal">0</b><span>Total de imóveis</span></div>
-    <div class="metric"><b id="mPending">0</b><span>Em análise</span></div>
-    <div class="metric"><b id="mSent">0</b><span>Enviados</span></div>
-    <div class="metric"><b id="mClosed">0</b><span>Concluídos</span></div>
-  </div>
-  <div class="panel"><h3>Fluxo</h3><div class="flow"><span>📥 Cadastrado</span><span>→</span><span>📤 Enviado</span><span>→</span><span>🔎 Em análise</span><span>→</span><span>🤝 Negociação</span><span>→</span><span>🏁 Concluído</span></div></div>
-</section>
-</main>
+        <div class="panel">
+          <p>Peça ao proprietário para assinar no quadro abaixo.</p>
+          <canvas id="signature" width="900" height="350"></canvas>
 
-<nav class="bottom">
-  <button data-go="home">⌂<small>Início</small></button>
-  <button data-go="properties">▣<small>Imóveis</small></button>
-  <button data-go="new" class="add">＋</button>
-  <button data-go="admin">▥<small>Painel</small></button>
-</nav>
+          <div class="row">
+            <button id="clearSignature" class="secondary">Limpar</button>
+            <button id="reviewBtn" class="primary">Revisar cadastro →</button>
+          </div>
+        </div>
+      </section>
 
-<div id="toast" class="toast"></div>
-<script src="app.js"></script>
-</body>
+      <section id="review" class="screen">
+        <div class="section-head">
+          <button class="back" data-go="signatureScreen">←</button>
+          <div>
+            <p class="eyebrow">CONFERÊNCIA</p>
+            <h1>Revisar imóvel</h1>
+          </div>
+        </div>
+        <div id="reviewCard" class="panel review-card"></div>
+        <button id="saveProperty" class="primary full big">
+          ✓ Salvar e enviar imóvel
+        </button>
+      </section>
+
+      <section id="properties" class="screen">
+        <div class="section-head">
+          <button class="back" data-go="home">←</button>
+          <div>
+            <p class="eyebrow">MEUS IMÓVEIS</p>
+            <h1>Imóveis</h1>
+          </div>
+        </div>
+        <div id="allList" class="cards empty">Nenhum imóvel cadastrado.</div>
+      </section>
+
+      <section id="admin" class="screen">
+        <div class="section-head">
+          <button class="back" data-go="home">←</button>
+          <div>
+            <p class="eyebrow">GESTÃO</p>
+            <h1>Painel</h1>
+          </div>
+        </div>
+        <div class="admin-grid">
+          <div class="metric">
+            <b id="mTotal">0</b><span>Total de imóveis</span>
+          </div>
+          <div class="metric">
+            <b id="mPending">0</b><span>Em análise</span>
+          </div>
+          <div class="metric"><b id="mSent">0</b><span>Enviados</span></div>
+          <div class="metric"><b id="mClosed">0</b><span>Concluídos</span></div>
+        </div>
+        <div class="panel">
+          <h3>Fluxo</h3>
+          <div class="flow">
+            <span>📥 Cadastrado</span><span>→</span><span>📤 Enviado</span
+            ><span>→</span><span>🔎 Em análise</span><span>→</span
+            ><span>🤝 Negociação</span><span>→</span><span>🏁 Concluído</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom">
+      <button data-go="home">⌂<small>Início</small></button>
+      <button data-go="properties">▣<small>Imóveis</small></button>
+      <button data-go="new" class="add">＋</button>
+      <button data-go="admin">▥<small>Painel</small></button>
+    </nav>
+
+    <div id="toast" class="toast"></div>
+    <script src="app.js"></script>
+  </body>
 </html>
