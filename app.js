@@ -483,7 +483,9 @@ function editarImovel(id) {
   $("#area").value = draft.area || "";
 
   $("#description").value = draft.description || "";
-  $("#status").value = draft.status || "Enviado";
+  if ($("#status")) {
+    $("#status").value = draft.status || "Enviado";
+  }
   $("#owner").value = draft.owner || "";
   $("#phone").value = draft.phone || "";
   $("#whatsapp").value = draft.whatsapp || "";
