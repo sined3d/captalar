@@ -87,10 +87,23 @@ async function salvarNoSupabase(imovel) {
   });
 }
 function go(id) {
+
+  if (id === "new" && !editingProperty) {
+  draft = {
+    photos: [],
+    signature: null
+  };
+
+  $("#status").value = "Enviado";
+}
   $$(".screen").forEach((x) => x.classList.remove("active"));
+
   $("#" + id).classList.add("active");
+
   window.scrollTo(0, 0);
+
   refresh();
+
 }
 $$("[data-go]").forEach((b) =>
   b.addEventListener("click", () => go(b.dataset.go)),
@@ -183,7 +196,7 @@ $("#propertyForm").onsubmit = (e) => {
     whatsapp: $("#whatsapp").value,
     email: $("#email").value,
 
-    status: editingProperty ? draft.status || "Enviado" : "Enviado",
+   status: $("#status").value,
 
     created: editingProperty
       ? draft.created || new Date().toISOString()
@@ -476,6 +489,7 @@ function editarImovel(id) {
   $("#area").value = draft.area || "";
 
   $("#description").value = draft.description || "";
+  $("#status").value = draft.status || "Enviado";
   $("#owner").value = draft.owner || "";
   $("#phone").value = draft.phone || "";
   $("#whatsapp").value = draft.whatsapp || "";
