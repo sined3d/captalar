@@ -561,6 +561,9 @@ function aplicarFiltros() {
     .trim()
     .toLowerCase();
 
+  const minPrice = Number($("#filterMinPrice")?.value || 0);
+  const maxPrice = Number($("#filterMaxPrice")?.value || 0);
+
   const filtrados = properties.filter((p) => {
     const dadosPesquisa = [p.id, p.address, p.number, p.neighborhood, p.city]
       .filter(Boolean)
@@ -575,7 +578,24 @@ function aplicarFiltros() {
     const correspondeStatus =
       !status || String(p.status || "").toLowerCase() === status;
 
-    return correspondeTexto && correspondeTipo && correspondeStatus;
+    const preco =
+      Number(
+        String(p.price || "")
+          .replace(".", "")
+          .replace(",", "."),
+      ) || 0;
+
+    const correspondeMinPrice = !minPrice || preco >= minPrice;
+
+    const correspondeMaxPrice = !maxPrice || preco <= maxPrice;
+
+    return (
+      correspondeTexto &&
+      correspondeTipo &&
+      correspondeStatus &&
+      correspondeMinPrice &&
+      correspondeMaxPrice
+    );
   });
 
   $("#allList").innerHTML = filtrados.length
@@ -592,10 +612,16 @@ $("#filterType")?.addEventListener("change", aplicarFiltros);
 
 $("#filterStatus")?.addEventListener("change", aplicarFiltros);
 
+$("#filterMinPrice")?.addEventListener("input", aplicarFiltros);
+
+$("#filterMaxPrice")?.addEventListener("input", aplicarFiltros);
+
 $("#clearFilters")?.addEventListener("click", () => {
   $("#propertySearch").value = "";
   $("#filterType").value = "";
   $("#filterStatus").value = "";
+  $("#filterMinPrice").value = "";
+  $("#filterMaxPrice").value = "";
 
   aplicarFiltros();
 });
