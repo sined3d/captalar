@@ -93,7 +93,7 @@ function go(id) {
       signature: null,
     };
 
-    $("#status").value = "Enviado";
+    if ($("#status")) $("#status").value = "Enviado";
   }
   $$(".screen").forEach((x) => x.classList.remove("active"));
 
