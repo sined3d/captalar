@@ -418,7 +418,7 @@ function card(p) {
         <div class="property-title">
           <div>
             <h3>${p.type || "Imóvel"}</h3>
-            <span class="property-id">Código ${p.id}</span>
+            <span class="property-id">Código ${Number(p.id)}</span>
           </div>
 
           <span class="tag">${p.status || "Enviado"}</span>
