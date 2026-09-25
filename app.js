@@ -278,6 +278,33 @@ $("#reviewBtn").onclick = () => {
 };
 $("#saveProperty").onclick = async () => {
   try {
+    const normalize = (value) =>
+      String(value || "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, " ");
+
+    const chaveImovel = (p) =>
+      [
+        normalize(p.address),
+        normalize(p.number),
+        normalize(p.neighborhood),
+        normalize(p.city),
+      ].join("|");
+
+    const chaveAtual = chaveImovel(draft);
+
+    const duplicado = properties.find(
+      (p) => p.id !== draft.id && chaveImovel(p) === chaveAtual,
+    );
+
+    if (duplicado) {
+      toast("Este imóvel já está cadastrado.");
+      return;
+    }
+
     await salvarNoSupabase(draft);
 
     properties = properties.filter((p) => p.id !== draft.id);
