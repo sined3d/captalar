@@ -92,8 +92,6 @@ function go(id) {
       photos: [],
       signature: null,
     };
-
-    if ($("#status")) $("#status").value = "Enviado";
   }
   $$(".screen").forEach((x) => x.classList.remove("active"));
 
