@@ -87,15 +87,14 @@ async function salvarNoSupabase(imovel) {
   });
 }
 function go(id) {
-
   if (id === "new" && !editingProperty) {
-  draft = {
-    photos: [],
-    signature: null
-  };
+    draft = {
+      photos: [],
+      signature: null,
+    };
 
-  $("#status").value = "Enviado";
-}
+    $("#status").value = "Enviado";
+  }
   $$(".screen").forEach((x) => x.classList.remove("active"));
 
   $("#" + id).classList.add("active");
@@ -103,7 +102,6 @@ function go(id) {
   window.scrollTo(0, 0);
 
   refresh();
-
 }
 $$("[data-go]").forEach((b) =>
   b.addEventListener("click", () => go(b.dataset.go)),
@@ -196,7 +194,7 @@ $("#propertyForm").onsubmit = (e) => {
     whatsapp: $("#whatsapp").value,
     email: $("#email").value,
 
-   status: $("#status").value,
+    status: $("#status").value,
 
     created: editingProperty
       ? draft.created || new Date().toISOString()
@@ -456,7 +454,6 @@ function card(p) {
     </div>
   `;
 }
-```
 
 function editarImovel(id) {
   const imovel = properties.find((p) => p.id === id);
