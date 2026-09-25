@@ -265,7 +265,6 @@ $("#photoGrid").onclick = (e) => {
   toast("Foto removida.");
 };
 $("#toSignature").onclick = () => {
-
   if (!draft.photos.length) {
     toast("Adicione pelo menos uma foto.");
     return;
@@ -347,11 +346,7 @@ $("#reviewBtn").onclick = () => {
 
   go("review");
 };
-  draft.signature = canvas.toDataURL("image/png");
-  $("#reviewCard").innerHTML =
-    `<dl><dt>ID</dt><dd><b>${draft.id}</b></dd><dt>Endereço</dt><dd>${draft.address}, ${draft.number} — ${draft.neighborhood} — ${draft.city}</dd><dt>Tipo</dt><dd>${draft.type}</dd><dt>Valor</dt><dd>${money(draft.price)}</dd><dt>Características</dt><dd>${draft.rooms || 0} quartos · ${draft.baths || 0} banheiros · ${draft.parking || 0} vagas · ${draft.area || 0} m²</dd><dt>Proprietário</dt><dd>${draft.owner}</dd><dt>Fotos</dt><dd>${draft.photos.length}</dd><dt>Autorização</dt><dd>✓ Assinatura registrada</dd></dl>`;
-  go("review");
-};
+
 $("#saveProperty").onclick = async () => {
   try {
     const normalize = (value) =>
