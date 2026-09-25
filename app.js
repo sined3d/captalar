@@ -405,7 +405,6 @@ $("#saveProperty").onclick = async () => {
   }
 };
 
-```js
 function card(p) {
   let img = p.photos?.[0];
 
