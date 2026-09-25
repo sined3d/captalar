@@ -192,7 +192,7 @@ $("#propertyForm").onsubmit = (e) => {
     whatsapp: $("#whatsapp").value,
     email: $("#email").value,
 
-    status: $("#status").value,
+    status: $("#status") ? $("#status").value : draft.status || "Enviado",
 
     created: editingProperty
       ? draft.created || new Date().toISOString()
