@@ -540,7 +540,6 @@ $("#recentList").onclick = (e) => {
 
   editarImovel(botao.dataset.id);
 };
-
 $("#allList").onclick = (e) => {
   const botao = e.target.closest(".edit-property");
 
@@ -548,6 +547,58 @@ $("#allList").onclick = (e) => {
 
   editarImovel(botao.dataset.id);
 };
+
+function aplicarFiltros() {
+  const texto = String($("#propertySearch")?.value || "")
+    .trim()
+    .toLowerCase();
+
+  const tipo = String($("#filterType")?.value || "")
+    .trim()
+    .toLowerCase();
+
+  const status = String($("#filterStatus")?.value || "")
+    .trim()
+    .toLowerCase();
+
+  const filtrados = properties.filter((p) => {
+    const dadosPesquisa = [p.id, p.address, p.number, p.neighborhood, p.city]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    const correspondeTexto = !texto || dadosPesquisa.includes(texto);
+
+    const correspondeTipo =
+      !tipo || String(p.type || "").toLowerCase() === tipo;
+
+    const correspondeStatus =
+      !status || String(p.status || "").toLowerCase() === status;
+
+    return correspondeTexto && correspondeTipo && correspondeStatus;
+  });
+
+  $("#allList").innerHTML = filtrados.length
+    ? filtrados.map(card).join("")
+    : "Nenhum imóvel encontrado.";
+
+  $("#filterCount").textContent =
+    `${filtrados.length} imóvel${filtrados.length === 1 ? "" : "is"} encontrado${filtrados.length === 1 ? "" : "s"}.`;
+}
+
+$("#propertySearch")?.addEventListener("input", aplicarFiltros);
+
+$("#filterType")?.addEventListener("change", aplicarFiltros);
+
+$("#filterStatus")?.addEventListener("change", aplicarFiltros);
+
+$("#clearFilters")?.addEventListener("click", () => {
+  $("#propertySearch").value = "";
+  $("#filterType").value = "";
+  $("#filterStatus").value = "";
+
+  aplicarFiltros();
+});
 
 refresh();
 
