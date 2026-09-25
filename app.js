@@ -5,6 +5,7 @@ let properties = JSON.parse(
 );
 let draft = { photos: [], signature: null };
 let deferredPrompt = null;
+let editingProperty = false;
 
 const SUPABASE_URL = "https://emvmzkenynkqqmzrqxqi.supabase.co";
 const SUPABASE_KEY = "sb_publishable_2VCIY9lN322gBZuh3fu9Eg_hNUmvTA7";
@@ -155,9 +156,16 @@ $("#geoBtn").onclick = () => {
 
 $("#propertyForm").onsubmit = (e) => {
   e.preventDefault();
+
+  const idExistente = draft.id;
+  const fotosExistentes = draft.photos || [];
+  const assinaturaExistente = draft.signature || null;
+
   draft = {
     ...draft,
-    id: idFor(),
+
+    id: editingProperty ? idExistente : idFor(),
+
     address: $("#address").value,
     number: $("#number").value,
     neighborhood: $("#neighborhood").value,
@@ -174,12 +182,22 @@ $("#propertyForm").onsubmit = (e) => {
     phone: $("#phone").value,
     whatsapp: $("#whatsapp").value,
     email: $("#email").value,
-    status: "Enviado",
-    created: new Date().toISOString(),
-    photos: [],
+
+    status: editingProperty ? draft.status || "Enviado" : "Enviado",
+
+    created: editingProperty
+      ? draft.created || new Date().toISOString()
+      : new Date().toISOString(),
+
+    photos: fotosExistentes,
+    signature: assinaturaExistente,
   };
+
   $("#photoGrid").innerHTML = "";
   $("#photoInput").value = "";
+
+  renderPhotos();
+
   go("photos");
 };
 
@@ -323,39 +341,132 @@ $("#saveProperty").onclick = async () => {
 
 function card(p) {
   let img = p.photos?.[0];
-  return `<div class="property-card">${img ? `<img class="thumb" src="${img}">` : `<div class="thumb"></div>`}<div style="flex:1"><h3>${p.type} · ${p.id}</h3><p>${p.address}, ${p.number} · ${p.neighborhood}</p><p>${money(p.price)} · ${p.rooms || 0} quartos · ${p.area || 0} m²</p><span class="tag">${p.status}</span></div></div>`;
+
+  return `
+    <div class="property-card">
+      ${img ? `<img class="thumb" src="${img}">` : `<div class="thumb"></div>`}
+
+      <div style="flex:1">
+        <h3>${p.type} · ${p.id}</h3>
+
+        <p>
+          ${p.address}, ${p.number} · ${p.neighborhood}
+        </p>
+
+        <p>
+          ${money(p.price)} · ${p.rooms || 0} quartos · ${p.area || 0} m²
+        </p>
+
+        <span class="tag">${p.status}</span>
+
+        <div style="margin-top:10px">
+          <button
+            class="secondary edit-property"
+            data-id="${p.id}"
+          >
+            ✏️ Editar
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+function editarImovel(id) {
+  const imovel = properties.find((p) => p.id === id);
+
+  if (!imovel) {
+    toast("Imóvel não encontrado.");
+    return;
+  }
+
+  draft = {
+    ...imovel,
+    photos: [...(imovel.photos || [])],
+    signature: imovel.signature || null,
+  };
+
+  editingProperty = true;
+
+  $("#address").value = draft.address || "";
+  $("#number").value = draft.number || "";
+  $("#neighborhood").value = draft.neighborhood || "";
+  $("#city").value = draft.city || "";
+  $("#cep").value = draft.cep || "";
+
+  $("#type").value = draft.type || "Casa";
+  $("#price").value = draft.price || "";
+  $("#rooms").value = draft.rooms || "";
+  $("#baths").value = draft.baths || "";
+  $("#parking").value = draft.parking || "";
+  $("#area").value = draft.area || "";
+
+  $("#description").value = draft.description || "";
+  $("#owner").value = draft.owner || "";
+  $("#phone").value = draft.phone || "";
+  $("#whatsapp").value = draft.whatsapp || "";
+  $("#email").value = draft.email || "";
+
+  renderPhotos();
+
+  go("new");
 }
 function refresh() {
   $("#totalCount").textContent = properties.length;
+
   $("#pendingCount").textContent = properties.filter(
     (p) => p.status === "Em análise",
   ).length;
+
   $("#negotiationCount").textContent = properties.filter(
     (p) => p.status === "Negociação",
   ).length;
+
   $("#closedCount").textContent = properties.filter((p) =>
     ["Vendido", "Alugado", "Concluído"].includes(p.status),
   ).length;
+
   $("#recentList").innerHTML = properties.length
     ? properties.slice(0, 5).map(card).join("")
     : "Nenhum imóvel cadastrado ainda.";
+
   $("#allList").innerHTML = properties.length
     ? properties.map(card).join("")
     : "Nenhum imóvel cadastrado.";
+
   $("#mTotal").textContent = properties.length;
+
   $("#mPending").textContent = properties.filter(
     (p) => p.status === "Em análise",
   ).length;
+
   $("#mSent").textContent = properties.filter((p) =>
     ["Enviado", "Em análise", "Negociação"].includes(p.status),
   ).length;
+
   $("#mClosed").textContent = properties.filter((p) =>
     ["Vendido", "Alugado", "Concluído"].includes(p.status),
   ).length;
 }
-refresh();
-carregarDoSupabase();
 
+$("#recentList").onclick = (e) => {
+  const botao = e.target.closest(".edit-property");
+
+  if (!botao) return;
+
+  editarImovel(botao.dataset.id);
+};
+
+$("#allList").onclick = (e) => {
+  const botao = e.target.closest(".edit-property");
+
+  if (!botao) return;
+
+  editarImovel(botao.dataset.id);
+};
+
+refresh();
+
+carregarDoSupabase();
 window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPrompt = e;
