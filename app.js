@@ -392,27 +392,46 @@ $("#saveProperty").onclick = async () => {
   }
 };
 
+```js
 function card(p) {
   let img = p.photos?.[0];
 
   return `
     <div class="property-card">
-      ${img ? `<img class="thumb" src="${img}">` : `<div class="thumb"></div>`}
 
-      <div style="flex:1">
-        <h3>${p.type} · ${p.id}</h3>
+      ${
+        img
+          ? `<img class="thumb" src="${img}" alt="Foto do imóvel">`
+          : `<div class="thumb no-photo">🏠</div>`
+      }
 
-        <p>
-          ${p.address}, ${p.number} · ${p.neighborhood}
+      <div class="property-info">
+
+        <div class="property-title">
+          <div>
+            <h3>${p.type || "Imóvel"}</h3>
+            <span class="property-id">Código ${p.id}</span>
+          </div>
+
+          <span class="tag">${p.status || "Enviado"}</span>
+        </div>
+
+        <p class="property-address">
+          📍 ${p.address || "Endereço não informado"}${
+            p.number ? `, ${p.number}` : ""
+          }
+          ${p.neighborhood ? ` · ${p.neighborhood}` : ""}
         </p>
 
-        <p>
-          ${money(p.price)} · ${p.rooms || 0} quartos · ${p.area || 0} m²
+        <p class="property-details">
+          <strong>${money(p.price)}</strong>
+          <span>·</span>
+          <span>🛏️ ${p.rooms || 0} quartos</span>
+          <span>·</span>
+          <span>📐 ${p.area || 0} m²</span>
         </p>
 
-        <span class="tag">${p.status}</span>
-
-        <div style="margin-top:10px">
+        <div class="property-actions">
           <button
             class="secondary edit-property"
             data-id="${p.id}"
@@ -420,10 +439,13 @@ function card(p) {
             ✏️ Editar
           </button>
         </div>
+
       </div>
     </div>
   `;
 }
+```
+
 function editarImovel(id) {
   const imovel = properties.find((p) => p.id === id);
 
