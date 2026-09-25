@@ -232,9 +232,38 @@ $("#photoInput").onchange = (e) => {
 };
 function renderPhotos() {
   $("#photoGrid").innerHTML =
-    draft.photos.map((p) => `<img src="${p}" alt="Foto do imóvel">`).join("") ||
-    '<div class="hint">Nenhuma foto adicionada.</div>';
+    draft.photos
+      .map(
+        (p, index) => `
+      <div class="photo-item">
+        <img src="${p}" alt="Foto do imóvel">
+
+        <button
+          type="button"
+          class="delete-photo"
+          data-index="${index}"
+          title="Apagar foto"
+        >
+          🗑️
+        </button>
+      </div>
+    `,
+      )
+      .join("") || '<div class="hint">Nenhuma foto adicionada.</div>';
 }
+$("#photoGrid").onclick = (e) => {
+  const botao = e.target.closest(".delete-photo");
+
+  if (!botao) return;
+
+  const index = Number(botao.dataset.index);
+
+  draft.photos.splice(index, 1);
+
+  renderPhotos();
+
+  toast("Foto removida.");
+};
 $("#toSignature").onclick = () => {
   if (!draft.photos.length) {
     toast("Adicione pelo menos uma foto.");
