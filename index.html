@@ -259,6 +259,55 @@
             <h1>Imóveis</h1>
           </div>
         </div>
+
+        <div class="property-search panel">
+          <h3>🔎 Buscar imóveis</h3>
+
+          <label>
+            Pesquisa
+            <input
+              id="propertySearch"
+              type="search"
+              placeholder="Código, endereço, bairro ou cidade"
+            />
+          </label>
+
+          <div class="grid2">
+            <label>
+              Tipo
+              <select id="filterType">
+                <option value="">Todos os tipos</option>
+                <option value="Casa">Casa</option>
+                <option value="Apartamento">Apartamento</option>
+                <option value="Terreno">Terreno</option>
+                <option value="Comercial">Comercial</option>
+                <option value="Rural">Rural</option>
+              </select>
+            </label>
+
+            <label>
+              Status
+              <select id="filterStatus">
+                <option value="">Todos os status</option>
+                <option value="Enviado">📝 Enviado</option>
+                <option value="Em análise">🔎 Em análise</option>
+                <option value="Publicado">📢 Publicado</option>
+                <option value="Interessado">💬 Interessado</option>
+                <option value="Negociação">🤝 Negociação</option>
+                <option value="Vendido">🏠 Vendido</option>
+                <option value="Alugado">🔑 Alugado</option>
+                <option value="Concluído">✅ Concluído</option>
+              </select>
+            </label>
+          </div>
+
+          <button type="button" id="clearFilters" class="secondary full">
+            Limpar filtros
+          </button>
+        </div>
+
+        <div id="filterCount" class="hint"></div>
+
         <div id="allList" class="cards empty">Nenhum imóvel cadastrado.</div>
       </section>
 
