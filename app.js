@@ -461,7 +461,7 @@ function card(p) {
     </div>
   `;
 }
-function compartilharWhatsApp(id) {
+async function compartilharWhatsApp(id) {
   const imovel = properties.find((p) => p.id === id);
 
   if (!imovel) {
@@ -489,18 +489,76 @@ ${imovel.address || "Endereço não informado"}${
 📝 *Descrição:*
 ${imovel.description || "Entre em contato para receber mais informações."}
 
-👤 *Proprietário:* ${imovel.owner || "Não informado"}
-📞 *Telefone:* ${imovel.phone || "Não informado"}${
-    imovel.whatsapp ? `\n📲 *WhatsApp:* ${imovel.whatsapp}` : ""
-  }${imovel.email ? `\n✉️ *E-mail:* ${imovel.email}` : ""}
+📲 *Entre em contato para saber mais sobre este imóvel.*`;
 
-Entre em contato para mais informações sobre este imóvel.`;
+  function dataUrlParaArquivo(dataUrl, index) {
+    const partes = dataUrl.split(",");
+    const mime =
+      partes[0].match(/data:(.*?);/)?.[1] || "image/jpeg";
 
-  const url = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
+    const binario = atob(partes[1]);
+    const bytes = new Uint8Array(binario.length);
 
-  window.open(url, "_blank");
+    for (let i = 0; i < binario.length; i++) {
+      bytes[i] = binario.charCodeAt(i);
+    }
+
+    const extensao =
+      mime === "image/png"
+        ? "png"
+        : mime === "image/webp"
+          ? "webp"
+          : "jpg";
+
+    return new File(
+      [bytes],
+      `imovel-${Number(imovel.id)}-${index + 1}.${extensao}`,
+      { type: mime },
+    );
+  }
+
+  try {
+    const fotos = (imovel.photos || [])
+      .filter((foto) => String(foto).startsWith("data:image/"))
+      .map((foto, index) => dataUrlParaArquivo(foto, index));
+
+    if (
+      fotos.length &&
+      navigator.share &&
+      navigator.canShare &&
+      navigator.canShare({ files: fotos })
+    ) {
+      await navigator.share({
+        text: mensagem,
+        files: fotos,
+      });
+
+      return;
+    }
+
+    if (navigator.share) {
+      await navigator.share({
+        text: mensagem,
+      });
+
+      return;
+    }
+
+    const url = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
+
+    window.open(url, "_blank");
+  } catch (erro) {
+    if (erro?.name === "AbortError") {
+      return;
+    }
+
+    console.error("Erro ao compartilhar imóvel:", erro);
+
+    const url = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
+
+    window.open(url, "_blank");
+  }
 }
-function editarImovel(id) {
   const imovel = properties.find((p) => p.id === id);
 
   if (!imovel) {
