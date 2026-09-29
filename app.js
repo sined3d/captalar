@@ -440,17 +440,54 @@ function card(p) {
         </p>
 
         <div class="property-actions">
+
           <button
             class="secondary edit-property"
             data-id="${p.id}"
           >
             ✏️ Editar
           </button>
+
+          <button
+            class="secondary whatsapp-property"
+            data-id="${p.id}"
+          >
+            📲 WhatsApp
+          </button>
+
         </div>
 
       </div>
     </div>
   `;
+}
+function compartilharWhatsApp(id) {
+  const imovel = properties.find((p) => p.id === id);
+
+  if (!imovel) {
+    toast("Imóvel não encontrado.");
+    return;
+  }
+
+  const mensagem = `🏠 *${imovel.type || "Imóvel"}*
+
+📍 ${imovel.address || "Endereço não informado"}${
+    imovel.number ? `, ${imovel.number}` : ""
+  }${imovel.neighborhood ? ` - ${imovel.neighborhood}` : ""}
+
+💰 *Valor:* ${money(imovel.price)}
+🛏️ *Quartos:* ${imovel.rooms || 0}
+🚿 *Banheiros:* ${imovel.baths || 0}
+🚗 *Vagas:* ${imovel.parking || 0}
+📐 *Área:* ${imovel.area || 0} m²
+
+📋 *Código:* ${Number(imovel.id)}
+
+Entre em contato para mais informações.`;
+
+  const url = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
+
+  window.open(url, "_blank");
 }
 
 function editarImovel(id) {
@@ -540,6 +577,21 @@ $("#recentList").onclick = (e) => {
 
   editarImovel(botao.dataset.id);
 };
+$("#recentList").addEventListener("click", (e) => {
+  const botao = e.target.closest(".whatsapp-property");
+
+  if (!botao) return;
+
+  compartilharWhatsApp(botao.dataset.id);
+});
+
+$("#allList").addEventListener("click", (e) => {
+  const botao = e.target.closest(".whatsapp-property");
+
+  if (!botao) return;
+
+  compartilharWhatsApp(botao.dataset.id);
+});
 $("#allList").onclick = (e) => {
   const botao = e.target.closest(".edit-property");
 
