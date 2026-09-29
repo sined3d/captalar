@@ -559,9 +559,11 @@ ${imovel.description || "Entre em contato para receber mais informações."}
     window.open(url, "_blank");
   }
 }
-  const imovel = properties.find((p) => p.id === id);
 
-  if (!imovel) {
+function editarImovel(id) {
+  const imovel = properties.find((p) => p.id === id);
+  
+ if (!imovel) {
     toast("Imóvel não encontrado.");
     return;
   }
