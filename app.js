@@ -491,19 +491,17 @@ ${imovel.description || "Entre em contato para receber mais informações."}
 
 📲 *Entre em contato para saber mais sobre este imóvel.*`;
 
-  const fotos = (imovel.photos || [])
-    .filter((foto) => String(foto).startsWith("data:image/"));
+  const ehCelular = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  const fotos = (imovel.photos || []).filter((foto) =>
+    String(foto).startsWith("data:image/"),
+  );
 
   try {
-    if (
-      fotos.length &&
-      navigator.share &&
-      navigator.canShare
-    ) {
+    if (ehCelular && fotos.length && navigator.share && navigator.canShare) {
       const arquivos = fotos.map((foto, index) => {
         const partes = foto.split(",");
-        const mime =
-          partes[0].match(/data:(.*?);/)?.[1] || "image/jpeg";
+        const mime = partes[0].match(/data:(.*?);/)?.[1] || "image/jpeg";
 
         const binario = atob(partes[1]);
         const bytes = new Uint8Array(binario.length);
@@ -513,11 +511,7 @@ ${imovel.description || "Entre em contato para receber mais informações."}
         }
 
         const extensao =
-          mime === "image/png"
-            ? "png"
-            : mime === "image/webp"
-              ? "webp"
-              : "jpg";
+          mime === "image/png" ? "png" : mime === "image/webp" ? "webp" : "jpg";
 
         return new File(
           [bytes],
@@ -567,8 +561,8 @@ ${imovel.description || "Entre em contato para receber mais informações."}
 
 function editarImovel(id) {
   const imovel = properties.find((p) => p.id === id);
-  
- if (!imovel) {
+
+  if (!imovel) {
     toast("Imóvel não encontrado.");
     return;
   }
