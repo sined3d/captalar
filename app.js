@@ -471,9 +471,12 @@ function compartilharWhatsApp(id) {
 
   const mensagem = `🏠 *${imovel.type || "Imóvel"}*
 
-📍 ${imovel.address || "Endereço não informado"}${
+📍 *Localização:*
+${imovel.address || "Endereço não informado"}${
     imovel.number ? `, ${imovel.number}` : ""
-  }${imovel.neighborhood ? ` - ${imovel.neighborhood}` : ""}
+  }${imovel.neighborhood ? ` - ${imovel.neighborhood}` : ""}${
+    imovel.city ? ` - ${imovel.city}` : ""
+  }
 
 💰 *Valor:* ${money(imovel.price)}
 🛏️ *Quartos:* ${imovel.rooms || 0}
@@ -481,15 +484,22 @@ function compartilharWhatsApp(id) {
 🚗 *Vagas:* ${imovel.parking || 0}
 📐 *Área:* ${imovel.area || 0} m²
 
-📋 *Código:* ${Number(imovel.id)}
+📋 *Código do imóvel:* ${Number(imovel.id)}
 
-Entre em contato para mais informações.`;
+📝 *Descrição:*
+${imovel.description || "Entre em contato para receber mais informações."}
+
+👤 *Proprietário:* ${imovel.owner || "Não informado"}
+📞 *Telefone:* ${imovel.phone || "Não informado"}${
+    imovel.whatsapp ? `\n📲 *WhatsApp:* ${imovel.whatsapp}` : ""
+  }${imovel.email ? `\n✉️ *E-mail:* ${imovel.email}` : ""}
+
+Entre em contato para mais informações sobre este imóvel.`;
 
   const url = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
 
   window.open(url, "_blank");
 }
-
 function editarImovel(id) {
   const imovel = properties.find((p) => p.id === id);
 
