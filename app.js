@@ -491,57 +491,62 @@ ${imovel.description || "Entre em contato para receber mais informações."}
 
 📲 *Entre em contato para saber mais sobre este imóvel.*`;
 
-  function dataUrlParaArquivo(dataUrl, index) {
-    const partes = dataUrl.split(",");
-    const mime =
-      partes[0].match(/data:(.*?);/)?.[1] || "image/jpeg";
-
-    const binario = atob(partes[1]);
-    const bytes = new Uint8Array(binario.length);
-
-    for (let i = 0; i < binario.length; i++) {
-      bytes[i] = binario.charCodeAt(i);
-    }
-
-    const extensao =
-      mime === "image/png"
-        ? "png"
-        : mime === "image/webp"
-          ? "webp"
-          : "jpg";
-
-    return new File(
-      [bytes],
-      `imovel-${Number(imovel.id)}-${index + 1}.${extensao}`,
-      { type: mime },
-    );
-  }
+  const fotos = (imovel.photos || [])
+    .filter((foto) => String(foto).startsWith("data:image/"));
 
   try {
-    const fotos = (imovel.photos || [])
-      .filter((foto) => String(foto).startsWith("data:image/"))
-      .map((foto, index) => dataUrlParaArquivo(foto, index));
-
     if (
       fotos.length &&
       navigator.share &&
-      navigator.canShare &&
-      navigator.canShare({ files: fotos })
+      navigator.canShare
     ) {
-      await navigator.share({
-        text: mensagem,
-        files: fotos,
+      const arquivos = fotos.map((foto, index) => {
+        const partes = foto.split(",");
+        const mime =
+          partes[0].match(/data:(.*?);/)?.[1] || "image/jpeg";
+
+        const binario = atob(partes[1]);
+        const bytes = new Uint8Array(binario.length);
+
+        for (let i = 0; i < binario.length; i++) {
+          bytes[i] = binario.charCodeAt(i);
+        }
+
+        const extensao =
+          mime === "image/png"
+            ? "png"
+            : mime === "image/webp"
+              ? "webp"
+              : "jpg";
+
+        return new File(
+          [bytes],
+          `imovel-${Number(imovel.id)}-${index + 1}.${extensao}`,
+          { type: mime },
+        );
       });
 
-      return;
+      if (navigator.canShare({ files: arquivos })) {
+        await navigator.share({
+          text: mensagem,
+          files: arquivos,
+        });
+
+        return;
+      }
     }
 
-    if (navigator.share) {
-      await navigator.share({
-        text: mensagem,
-      });
+    if (fotos.length) {
+      const link = document.createElement("a");
 
-      return;
+      link.href = fotos[0];
+      link.download = `imovel-${Number(imovel.id)}-foto-1.jpg`;
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      toast("Foto principal baixada. Abrindo WhatsApp...");
     }
 
     const url = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
