@@ -582,3 +582,233 @@ canvas {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* =========================================
+   CAPTALAR 2.0 — NOVO VISUAL DA HOME
+   ========================================= */
+
+#home .hero {
+  position: relative;
+  overflow: hidden;
+  padding: 34px 30px;
+  border-radius: 24px;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(255, 255, 255, 0.18),
+      transparent 34%
+    ),
+    linear-gradient(135deg, #0b3b70 0%, #145da0 55%, #1d75bd 100%);
+  color: #fff;
+  box-shadow: 0 18px 40px rgba(11, 59, 112, 0.18);
+}
+
+#home .hero::after {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  right: -60px;
+  bottom: -80px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+#home .eyebrow {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  opacity: 0.82;
+}
+
+#home .hero h1 {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: 38px;
+  line-height: 1;
+  letter-spacing: -0.8px;
+  color: #fff;
+}
+
+#home .hero-subtitle {
+  position: relative;
+  z-index: 1;
+  max-width: 620px;
+  margin: 12px 0 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+#home .welcome {
+  position: relative;
+  z-index: 1;
+  margin-top: 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+
+#home .hero .primary.big {
+  position: relative;
+  z-index: 1;
+  margin-top: 20px;
+  min-height: 50px;
+  padding: 12px 20px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 800;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.14);
+}
+
+/* INDICADORES */
+
+#home .stats {
+  margin-top: 18px;
+  gap: 12px;
+}
+
+#home .stats > div {
+  position: relative;
+  padding: 18px 14px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 8px 22px rgba(23, 32, 51, 0.06);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+#home .stats > div:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(23, 32, 51, 0.1);
+}
+
+#home .stats b {
+  display: block;
+  font-size: 26px;
+  line-height: 1;
+}
+
+#home .stats small {
+  display: block;
+  margin-top: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+/* TÍTULOS DA HOME */
+
+#home h2 {
+  margin-top: 28px;
+  margin-bottom: 12px;
+  font-size: 18px;
+  letter-spacing: -0.2px;
+}
+
+/* AÇÕES RÁPIDAS */
+
+#home .quick-actions {
+  margin: 0;
+  gap: 12px;
+}
+
+#home .quick-actions .secondary {
+  min-height: 82px;
+  padding: 14px 10px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  color: var(--text);
+  box-shadow: 0 8px 20px rgba(23, 32, 51, 0.05);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+#home .quick-actions .secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(23, 32, 51, 0.09);
+}
+
+#home .quick-actions .secondary:first-child {
+  background: #edf5fd;
+  color: #0b5792;
+}
+
+#home .quick-actions .secondary:nth-child(2) {
+  background: #eef9f4;
+  color: #087d4d;
+}
+
+#home .quick-actions .secondary:nth-child(3) {
+  background: #fff3eb;
+  color: #c6530d;
+}
+
+#home .quick-actions .secondary span {
+  font-weight: 800;
+}
+
+/* ÚLTIMOS IMÓVEIS */
+
+#home #recentList {
+  display: grid;
+  gap: 12px;
+}
+
+/* CRÉDITO */
+
+#home .app-credit {
+  margin-top: 34px;
+  padding-top: 20px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+/* CELULAR */
+
+@media (max-width: 650px) {
+  #home .hero {
+    padding: 26px 20px;
+    border-radius: 20px;
+  }
+
+  #home .hero h1 {
+    font-size: 32px;
+  }
+
+  #home .hero-subtitle {
+    font-size: 14px;
+  }
+
+  #home .stats {
+    gap: 8px;
+  }
+
+  #home .stats > div {
+    padding: 15px 10px;
+    border-radius: 16px;
+  }
+
+  #home .stats b {
+    font-size: 22px;
+  }
+
+  #home .quick-actions {
+    gap: 8px;
+  }
+
+  #home .quick-actions .secondary {
+    min-height: 72px;
+    padding: 10px 6px;
+    border-radius: 15px;
+    font-size: 12px;
+  }
+}
