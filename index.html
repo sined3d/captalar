@@ -16,78 +16,124 @@
   <body>
     <header class="topbar">
       <div class="brand">
-        <span class="logo">⌂</span><span>Capta<span>Lar</span></span>
+        <span class="logo-mark">⌂</span>
+        <span class="brand-name">Capta<span>Lar</span></span>
       </div>
-      <button id="installBtn" class="ghost hidden">Instalar</button>
+
+      <div class="topbar-actions">
+        <button id="installBtn" class="ghost hidden">Instalar</button>
+        <div class="profile-chip" aria-label="Perfil do captador">
+          <span class="profile-avatar">DS</span>
+          <span class="profile-label">Captador</span>
+        </div>
+      </div>
     </header>
 
     <main>
       <section id="home" class="screen active">
-        <div class="hero">
-          <p class="eyebrow">CAPTURAÇÃO E GESTÃO IMOBILIÁRIA</p>
-
-          <h1>CAPTALAR</h1>
-
-          <p class="hero-subtitle">
-            Capture, organize e gerencie seus imóveis de forma rápida e
-            profissional.
-          </p>
-
-          <p class="welcome">Olá, <span id="userName">Captador</span>! 👋</p>
-
-          <button class="primary big" data-go="new">+ Novo imóvel</button>
+        <div class="home-top">
+          <div class="home-brand">
+            <div class="home-logo">⌂</div>
+            <div class="home-brand-name">Capta<span>Lar</span></div>
+          </div>
+          <button class="profile-button" data-go="admin" aria-label="Perfil">
+            <span class="profile-avatar">DS</span>
+            <span class="profile-name">Denis Siqueira</span>
+            <span class="profile-arrow">›</span>
+          </button>
         </div>
 
-        <div class="stats">
-          <div>
-            <b id="totalCount">0</b>
-            <small>Imóveis</small>
-          </div>
-
-          <div>
-            <b id="pendingCount">0</b>
-            <small>Em análise</small>
-          </div>
-
-          <div>
-            <b id="negotiationCount">0</b>
-            <small>Negociação</small>
-          </div>
-
-          <div>
-            <b id="closedCount">0</b>
-            <small>Concluídos</small>
-          </div>
+        <div class="home-welcome">
+          <p>Olá, <strong>Captador!</strong></p>
+          <span>Que tal encontrar hoje<br />uma nova oportunidade?</span>
         </div>
 
-        <h2>Ações rápidas</h2>
+        <button class="capture-hero" data-go="new">
+          <span class="capture-photo" aria-hidden="true"></span>
+          <span class="capture-overlay"></span>
+          <span class="capture-content">
+            <small>CAPTURE NOVAS OPORTUNIDADES</small>
+            <strong>Nova Captação</strong>
+            <span>Registre um novo imóvel<br />com poucos toques.</span>
+            <b>Começar <i>→</i></b>
+          </span>
+          <span class="capture-icon">⌂<sup>+</sup></span>
+        </button>
+
+        <section class="portfolio-card">
+          <div class="portfolio-head">
+            <div class="section-symbol green">▥</div>
+            <div>
+              <h2>Meus Imóveis</h2>
+              <p>Visão geral do seu portfólio</p>
+            </div>
+            <div class="portfolio-total">
+              <small>Total de imóveis</small><strong id="totalCount">0</strong>
+            </div>
+          </div>
+          <div class="portfolio-stats">
+            <div>
+              <strong id="pendingCount">0</strong
+              ><span><i class="dot green-dot"></i>Disponíveis</span>
+            </div>
+            <div>
+              <strong id="negotiationCount">0</strong
+              ><span><i class="dot orange-dot"></i>Em negociação</span>
+            </div>
+            <div>
+              <strong id="closedCount">0</strong
+              ><span><i class="dot blue-dot"></i>Alugado</span>
+            </div>
+            <div>
+              <strong id="unavailableCount">0</strong
+              ><span><i class="dot red-dot"></i>Indisponível</span>
+            </div>
+          </div>
+        </section>
+
+        <div class="home-section-head">
+          <div>
+            <h2>⚡ &nbsp;Ações rápidas</h2>
+            <p>Acesse o que você precisa, em um toque.</p>
+          </div>
+        </div>
 
         <div class="quick-actions">
-          <button class="secondary" data-go="properties">
-            🔎
-            <span>Buscar imóveis</span>
+          <button class="quick-card" data-go="new">
+            <span class="quick-icon blue">⌂<sup>+</sup></span>
+            <strong>Nova<br />Captação</strong>
           </button>
-
-          <button class="secondary" data-go="admin">
-            📊
-            <span>Painel</span>
+          <button class="quick-card" data-go="properties">
+            <span class="quick-icon green">⌂</span>
+            <strong>Meus<br />Imóveis</strong>
           </button>
-
-          <button class="secondary" data-go="new">
-            📸
-            <span>Nova captação</span>
+          <button class="quick-card" data-go="properties">
+            <span class="quick-icon purple">⌕</span>
+            <strong>Buscar<br />Imóveis</strong>
+          </button>
+          <button class="quick-card" data-go="admin">
+            <span class="quick-icon dark">▣</span>
+            <strong>Painel<br />e Relatórios</strong>
           </button>
         </div>
 
-        <h2>Últimos imóveis</h2>
+        <div class="home-section-head recent-head">
+          <div>
+            <h2>◷ &nbsp;Imóveis recentes</h2>
+            <p>Últimos imóveis adicionados ou atualizados.</p>
+          </div>
+          <button class="section-link" data-go="properties">
+            Ver todos&nbsp; ›
+          </button>
+        </div>
 
         <div id="recentList" class="cards empty">
           Nenhum imóvel cadastrado ainda.
         </div>
 
         <div class="app-credit">
-          © 2026 CaptaLar<br />
-          Desenvolvido por <strong>Denis Siqueira</strong>
+          <span>CaptaLar</span><br />Desenvolvido por
+          <strong>Denis Siqueira</strong>
         </div>
       </section>
 
@@ -364,13 +410,53 @@
     </main>
 
     <nav class="bottom">
-      <button data-go="home">⌂<small>Início</small></button>
-      <button data-go="properties">▣<small>Imóveis</small></button>
-      <button data-go="new" class="add">＋</button>
-      <button data-go="admin">▥<small>Painel</small></button>
+      <button data-go="home" class="nav-active">
+        <span>⌂</span><small>Início</small>
+      </button>
+      <button data-go="properties"><span>⌂</span><small>Imóveis</small></button>
+      <button data-go="new" class="add" aria-label="Nova captação">＋</button>
+      <button data-go="properties"><span>⌕</span><small>Buscar</small></button>
+      <button data-go="admin"><span>♙</span><small>Perfil</small></button>
     </nav>
-
     <div id="toast" class="toast"></div>
     <script src="app.js"></script>
+    <script>
+      (function () {
+        const oldRefresh = window.refresh;
+        function syncHomeStats() {
+          const list = JSON.parse(
+            localStorage.getItem("captalar_properties") || "[]",
+          );
+          const available = list.filter((p) =>
+            ["Enviado", "Publicado", "Interessado"].includes(
+              p.status || "Enviado",
+            ),
+          ).length;
+          const negotiation = list.filter(
+            (p) => p.status === "Negociação",
+          ).length;
+          const rented = list.filter((p) => p.status === "Alugado").length;
+          const unavailable = Math.max(
+            0,
+            list.length - available - negotiation - rented,
+          );
+          const set = (id, v) => {
+            const e = document.getElementById(id);
+            if (e) e.textContent = v;
+          };
+          set("totalCount", list.length);
+          set("pendingCount", available);
+          set("negotiationCount", negotiation);
+          set("closedCount", rented);
+          set("unavailableCount", unavailable);
+        }
+        if (typeof oldRefresh === "function")
+          window.refresh = function () {
+            oldRefresh();
+            syncHomeStats();
+          };
+        syncHomeStats();
+      })();
+    </script>
   </body>
 </html>
