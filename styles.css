@@ -498,18 +498,32 @@ main {
   gap: 8px;
   margin-top: 8px;
 }
-
-.property-actions .secondary {
-  padding: 7px 10px;
-  font-size: 11px;
-}
-
 .property-id {
   display: none;
 }
+.property-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.property-title > div {
+  min-width: 0;
+}
+
 .tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   font-size: 9px;
-  padding: 4px 7px;
+  font-weight: 800;
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #e9f2fc;
+  color: #1268e8;
+  white-space: nowrap;
 }
 .app-credit {
   text-align: left;
